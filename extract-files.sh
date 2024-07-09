@@ -86,6 +86,13 @@ function blob_fixup() {
             "${PATCHELF}" --remove-needed libhidltransport.so "${2}"
             "${PATCHELF}" --replace-needed libutils.so libutils-v32.so "${2}"
             ;;
+        vendor/lib/soundfx/libaudioeffectoffload.so | vendor/lib64/soundfx/libaudioeffectoffload.so)
+	    "$PATCHELF" --replace-needed libtinyalsa.so libtinyalsa.s5e9925.so "$2"
+	    ;;
+	vendor/lib/hw/audio.primary.exynos2100.so)
+	    "$PATCHELF" --replace-needed libaudioroute.so libaudioroute.s5e9925.so "$2"
+            "$PATCHELF" --replace-needed libtinyalsa.so libtinyalsa.s5e9925.so "$2"
+            ;;
     esac
 }
 if [ -z "${ONLY_TARGET}" ]; then

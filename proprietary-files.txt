@@ -34,8 +34,8 @@ vendor/lib/libspeakercalibration.so
 vendor/lib/soundfx/libaudioeffectoffload.so
 vendor/lib/soundfx/libmyspace.so
 vendor/lib/vendor.samsung_slsi.hardware.ExynosA2DPOffload@3.0.so
-vendor/lib/vndk/libaudioroute.so;MODULE=libaudioroute.s5e9925
-vendor/lib/vndk/libtinyalsa.so;MODULE=libtinyalsa.s5e9925
+vendor/lib/vndk/libaudioroute.so:vendor/lib/libaudioroute.s5e9925.so;MODULE=libaudioroute.s5e9925
+vendor/lib/vndk/libtinyalsa.so:vendor/lib/libtinyalsa.s5e9925.so;MODULE=libtinyalsa.s5e9925
 vendor/lib64/hw/vendor.samsung.hardware.audio@1.0-impl.so
 vendor/lib64/lib_SoundAlive_3DPosition_ver202.so
 vendor/lib64/lib_SoundAlive_AlbumArt_ver105.so
