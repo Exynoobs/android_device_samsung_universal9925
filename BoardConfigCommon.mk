@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-COMMON_PATH := device/samsung/universal2100-common
+COMMON_PATH := device/samsung/universal9925-common
 
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
@@ -22,13 +22,13 @@ TARGET_SPECIFIC_HEADER_PATH := $(COMMON_PATH)/include
 
 
 # Inherit proprietary vendor configuration
-include vendor/samsung/universal2100-common/BoardConfigVendor.mk
+include vendor/samsung/universal9925-common/BoardConfigVendor.mk
 
 # Platform
 BOARD_VENDOR := samsung
-TARGET_BOARD_PLATFORM := universal2100
-TARGET_BOOTLOADER_BOARD_NAME := exynos2100
-TARGET_SOC := exynos2100
+TARGET_BOARD_PLATFORM := universal9925
+TARGET_BOOTLOADER_BOARD_NAME := s5e9925
+TARGET_SOC := s5e9925
 
 # Architecture
 TARGET_ARCH := arm64
@@ -47,19 +47,25 @@ TARGET_2ND_CPU_VARIANT := cortex-a76
 BOARD_CUSTOM_BT_CONFIG := $(COMMON_PATH)/bluetooth/libbt_vndcfg.txt
 BOARD_HAVE_BLUETOOTH_BCM := true
 
-BOARD_BOOT_HEADER_VERSION := 3
+# Kernel
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_BOOT_HEADER_VERSION := 4
 BOARD_CUSTOM_BOOTIMG := true
-BOARD_DTB_OFFSET := 0x81F00000
-BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_OFFSET := 0x80008000
+BOARD_KERNEL_BASE := 0x10000000
+BOARD_KERNEL_OFFSET := 0x00008000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_TAGS_OFFSET := 0x80000000
-BOARD_RAMDISK_OFFSET := 0x84000000
+BOARD_KERNEL_IMAGE_NAME := Image
+BOARD_RAMDISK_OFFSET := 0x04000000
+BOARD_RAMDISK_USE_LZ4 := true
+BOARD_VENDOR_RAMDISK_FRAGMENTS := dlkm
 
 BOARD_MKBOOTIMG_ARGS := \
-    --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --dtb_offset $(BOARD_DTB_OFFSET) \
-    --tags_offset $(BOARD_KERNEL_TAGS_OFFSET) --pagesize $(BOARD_KERNEL_PAGESIZE) --header_version $(BOARD_BOOT_HEADER_VERSION) \
-    --board "SRPTH19C005KU"
+    --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset $(BOARD_RAMDISK_OFFSET) \
+    --pagesize $(BOARD_KERNEL_PAGESIZE) --header_version $(BOARD_BOOT_HEADER_VERSION) \
+    --board "SRPUH13A010"
+
+BOARD_VENDOR_RAMDISK_FRAGMENT.dlkm.MKBOOTIMG_ARGS += \
+    --ramdisk_type 3
 
 ## Camera
 $(call soong_config_set,samsungCameraVars,usage_64bit,true)
@@ -109,8 +115,8 @@ TARGET_USES_VULKAN := true
 
 # Kernel
 BOARD_KERNEL_IMAGE_NAME := Image
-TARGET_KERNEL_SOURCE := kernel/samsung/universal2100
-TARGET_KERNEL_ADDITIONAL_FLAGS := LLVM=1 CROSS_COMPILE=aarch64-linux-android- CLANG_TRIPLE=aarch64-linux-gnu
+TARGET_KERNEL_SOURCE := kernel/samsung/universal9925
+TARGET_KERNEL_ADDITIONAL_FLAGS := LLVM=1
 KERNEL_LD := LD=ld.lld
 TARGET_KERNEL_LLVM_BINUTILS := true
 TARGET_KERNEL_NO_GCC := true
@@ -123,6 +129,13 @@ TARGET_KEYMASTER_VARIANT := samsung
 #TARGET_HEALTH_CHARGING_CONTROL_CHARGING_ENABLED := 0
 #TARGET_HEALTH_CHARGING_CONTROL_CHARGING_DISABLED := 1
 #TARGET_HEALTH_CHARGING_CONTROL_SUPPORTS_BYPASS := false
+
+### CAMERA
+#SOONG_CONFIG_NAMESPACES += exynos2100CameraVars
+#SOONG_CONFIG_exynos2100CameraVars += \
+#    exynos2100_model
+#
+#SOONG_CONFIG_exynos2100CameraVars_exynos2100_model := $(TARGET_DEVICE)
 
 ## Manifest
 # HIDL
@@ -159,7 +172,7 @@ TARGET_VENDOR_PROP += $(COMMON_PATH)/vendor.prop
 # Recovery
 BOARD_INCLUDE_RECOVERY_DTBO := true
 BOARD_RECOVERY_MKBOOTIMG_ARGS += --header_version 2
-TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/configs/init/fstab.exynos2100
+TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/configs/init/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := "ABGR_8888"
 
 # Releasetools

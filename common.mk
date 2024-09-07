@@ -14,10 +14,10 @@
 # limitations under the License.
 #
 
-COMMON_PATH := device/samsung/universal2100-common
+COMMON_PATH := device/samsung/universal9925-common
 
 # Get non-open-source specific aspects
-$(call inherit-product, vendor/samsung/universal2100-common/universal2100-common-vendor.mk)
+$(call inherit-product, vendor/samsung/universal9925-common/universal9925-common-vendor.mk)
 
 PRODUCT_SHIPPING_API_LEVEL := 30
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
@@ -166,7 +166,7 @@ PRODUCT_PACKAGES += \
 DEVICE_PACKAGE_OVERLAYS += $(COMMON_PATH)/overlay
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
-    device/samsung/universal2100-common/overlay/hardware/samsung/AdvancedDisplay
+    device/samsung/universal9925-common/overlay/hardware/samsung/AdvancedDisplay
 
 # Preopt SystemUI and Settings
 PRODUCT_DEXPREOPT_SPEED_APPS += \
