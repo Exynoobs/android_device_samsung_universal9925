@@ -59,32 +59,33 @@ if [ -z "${SRC}" ]; then
 fi
 
 function blob_fixup() {
-    case "${1}" in
-        vendor/bin/vaultkeeperd|vendor/lib64/libvkservice.so)
-            sed -i 's/ro\.factory\.factory_binary/ro.vendor.factory_binary\x00/g' "${2}"
-            ;;
-        vendor/lib*/libsec-ril*.so)
-            xxd -p -c0 "${2}" | sed "s/800e40f9e10316aa820c8052e30315aa/800e40f9e10316aa820c8052080080d2/g" | xxd -r -p > "${2}".patched
-            mv "${2}".patched "${2}"
-            ;;
-        vendor/lib*/libsensorlistener.so)
-            "${PATCHELF}" --add-needed libshim_sensorndkbridge.so "${2}"
-            ;;
-        vendor/lib*/libskeymaster4device.so)
+	    case "${1}" in
+        vendor/bin/hw/android.hardware.security.keymint-service|vendor/lib*/libskeymint*.so)
+            "${PATCHELF}" --replace-needed android.hardware.security.keymint-V1-ndk_platform.so android.hardware.security.keymint-V1-ndk.so "${2}"
+            "${PATCHELF}" --replace-needed android.hardware.security.secureclock-V1-ndk_platform.so android.hardware.security.secureclock-V1-ndk.so "${2}"
+            "${PATCHELF}" --replace-needed android.hardware.security.sharedsecret-V1-ndk_platform.so android.hardware.security.sharedsecret-V1-ndk.so "${2}"
             "${PATCHELF}" --replace-needed libcrypto.so libcrypto-tm.so "${2}"
             "${PATCHELF}" --add-needed libssl-tm.so "${2}"
             "${PATCHELF}" --add-needed libshim_crypto.so "${2}"
             ;;
+	vendor/lib/libpuresoftkeymasterdevice.so)
+            "${PATCHELF}" --replace-needed libcrypto.so libcrypto-tm.so "${2}"
+	    ;;
+	vendor/lib*/libsensorlistener.so)
+            "${PATCHELF}" --add-needed libshim_sensorndkbridge.so "${2}"
+	    ;;
 	vendor/lib*/libwvhidl.so)
             "${PATCHELF}" --replace-needed libprotobuf-cpp-lite-3.9.1.so libprotobuf-cpp-full-3.9.1.so "${2}"
             ;;
-        vendor/lib*/hw/hwcomposer.exynos2100.so|vendor/lib*/sensors.*.so)
+	vendor/lib*/hw/hwcomposer.s5e9925.so)
             "${PATCHELF}" --replace-needed libutils.so libutils-v32.so "${2}"
-            sed -i 's/_ZN7android6Thread3runEPKcim/_ZN7utils326Thread3runEPKcim/g' "${2}"
+	    ;;
+        vendor/lib*/sensors.*.so)
+            "${PATCHELF}" --remove-needed libhidltransport.so "${2}"
+            "${PATCHELF}" --replace-needed libutils.so libutils-v32.so "${2}"
             ;;
     esac
 }
-
 if [ -z "${ONLY_TARGET}" ]; then
     # Initialize the helper for common device
     setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true "${CLEAN_VENDOR}"

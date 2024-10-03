@@ -802,7 +802,7 @@ on post-fs-data
 
 
 # MST/NFC Switch
-    chown vendor_spay system /dev/mst_ctrl
+    chown system system /dev/mst_ctrl
     chmod 0660 /dev/mst_ctrl
 
 #mAFPC

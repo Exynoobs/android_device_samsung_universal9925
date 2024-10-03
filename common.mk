@@ -24,9 +24,6 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_USE_DYNAMIC_PARTITION_SIZE := true
 PRODUCT_BUILD_SUPER_PARTITION := false
 
-# Soong namespaces
-$(call inherit-product, hardware/samsung_slsi-linaro/config/config.mk)
-
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio.effect@6.0-impl:32 \
@@ -58,22 +55,26 @@ PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
     $(COMMON_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
 
-# init
+PRODUCT_PACKAGES += \
+    init.recovery.s5e9925.rc
+
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/init/fstab.s5e9925:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.s5e9925 \
+    $(COMMON_PATH)/configs/init/init.s5e9925.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.s5e9925.rc \
+    $(COMMON_PATH)/configs/init/recovery.fstab:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/etc/recovery.fstab \
     $(COMMON_PATH)/configs/init/fstab.s5e9925:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/fstab.s5e9925 \
     $(COMMON_PATH)/configs/init/fstab.s5e9925:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.s5e9925 \
-    $(COMMON_PATH)/configs/init/init.s5e9925.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.s5e9925.rc \
-    $(COMMON_PATH)/configs/init/init.s5e9925.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.s5e9925.usb.rc \
+    $(COMMON_PATH)/configs/init/init.s5e9925.usb.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/etc/init/init.s5e9925.usb.rc \
     $(COMMON_PATH)/configs/init/init.recovery.s5e9925.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.s5e9925.rc \
-    $(COMMON_PATH)/configs/init/init.recovery.s5e9925.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.s5e9925.rc \
     $(COMMON_PATH)/configs/init/ueventd.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc \
-    $(COMMON_PATH)/configs/init/init.udfps.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.udfps.rc
+    $(COMMON_PATH)/configs/init/init.debug.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.debug.rc
 
-# Keymaster
+# Keymint
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.0-service.samsung \
-    libkeymaster4_1support.vendor:64
+    android.hardware.security.sharedsecret-V1-ndk
+
+# Kernel Modules
+PRODUCT_PACKAGES += \
+    toolbox.vendor_ramdisk
 
 PRODUCT_PACKAGES += \
     libcrypto-tm \
