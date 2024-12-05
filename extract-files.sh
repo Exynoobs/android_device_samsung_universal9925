@@ -86,6 +86,10 @@ function blob_fixup() {
             "${PATCHELF}" --remove-needed libhidltransport.so "${2}"
             "${PATCHELF}" --replace-needed libutils.so libutils-v32.so "${2}"
             ;;
+        vendor/lib64/libsec-ril.so)
+            xxd -p -c0 "${2}" | sed "s/600e40f9e10315aa820c8052e30314aa/600e40f9e10315aa820c8052030080d2/g" | xxd -r -p > "${2}".patched
+            mv "${2}".patched "${2}"
+            ;;
         vendor/lib/soundfx/libaudioeffectoffload.so | vendor/lib64/soundfx/libaudioeffectoffload.so)
 	    "$PATCHELF" --replace-needed libtinyalsa.so libtinyalsa.s5e9925.so "$2"
 	    ;;
